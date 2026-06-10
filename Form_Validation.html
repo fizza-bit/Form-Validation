@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation - Uresh Enterprises Mini Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875em;
+            display: none; /* Hidden by default */
+            margin-top: 5px;
+        }
+        .is-invalid-input {
+            border-color: #dc3545 !important;
+        }
+        .is-valid-input {
+            border-color: #198754 !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h3 class="text-center mb-4 fw-bold" style="color: #2c3e50;">Account Login</h3>
+    
+    <form id="loginForm" novalidate>
+        
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+            <div id="emailError" class="error-message">Please enter a valid email address.</div>
+        </div>
+
+        <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter password">
+            <div id="passwordError" class="error-message">Password must be at least 6 characters long.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 fw-bold">Login to Dashboard</button>
+        
+        <div id="successMessage" class="alert alert-success mt-3 text-center d-none" role="alert">
+            Login Successful! Redirecting...
+        </div>
+    </form>
+</div>
+
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const successMessage = document.getElementById('successMessage');
+
+    // Add event listener for form submission
+    loginForm.addEventListener('submit', function(event) {
+        // Prevent the default form submission behavior (page reload)
+        event.preventDefault(); 
+        
+        let isValid = true;
+
+        // 1. Validate Email
+        const emailValue = emailInput.value.trim();
+        // Regular expression for basic email validation
+        const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/; 
+        
+        if (emailValue === "" || !emailValue.match(emailPattern)) {
+            emailInput.classList.add('is-invalid-input');
+            emailInput.classList.remove('is-valid-input');
+            emailError.style.display = 'block';
+            isValid = false;
+        } else {
+            emailInput.classList.remove('is-invalid-input');
+            emailInput.classList.add('is-valid-input');
+            emailError.style.display = 'none';
+        }
+
+        // 2. Validate Password
+        const passwordValue = passwordInput.value.trim();
+        
+        if (passwordValue === "" || passwordValue.length < 6) {
+            passwordInput.classList.add('is-invalid-input');
+            passwordInput.classList.remove('is-valid-input');
+            passwordError.style.display = 'block';
+            isValid = false;
+        } else {
+            passwordInput.classList.remove('is-invalid-input');
+            passwordInput.classList.add('is-valid-input');
+            passwordError.style.display = 'none';
+        }
+
+        // 3. Final Check
+        if (isValid) {
+            // Hide the form visually and show success message
+            successMessage.classList.remove('d-none');
+            
+            // In a real project, you would redirect the user here:
+            // window.location.href = "dashboard.html";
+            
+            // Reset form for demonstration purposes
+            setTimeout(() => {
+                loginForm.reset();
+                emailInput.classList.remove('is-valid-input');
+                passwordInput.classList.remove('is-valid-input');
+                successMessage.classList.add('d-none');
+            }, 3000);
+        }
+    });
+</script>
+
+</body>
+</html>
